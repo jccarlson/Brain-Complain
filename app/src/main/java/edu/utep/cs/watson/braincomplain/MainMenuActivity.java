@@ -61,7 +61,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private void startMapIntent() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("geo:0,0?q=psychiatrist+office"));
+        intent.setData(Uri.parse("geo:0,0?q=psychiatrist+office+near+me"));
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }
