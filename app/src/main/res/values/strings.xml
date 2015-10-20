@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Brain Complain</string>
+    <string name="ask_watson">Ask Watson</string>
+    <string name="maps_psych">Search for Psychiatrists Near You</string>
+    <string name="call_SAMHSA">Call the SAMHSA Treatment Referral Helpline</string>
+    <string name="SAMHSA_number">18777264727</string>
+    <string name="quit">Quit</string>
+    <string name="user_id">utep_student17</string>
+    <string name="user_password">RE7T4I2j</string>
+    <string name="user_watson_server_instance">https://watson-wdc01.ihost.com/instance/530/deepqa/v1/question</string>
+    <string name="watson_instructions">Type a question for Watson in the input box below.</string>
+    <string name="watson_answer_title">Answer:</string>
+</resources>

@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainMenuActivity">
+    <item android:id="@+id/action_ask_watson" android:title="@string/ask_watson"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_maps_psych" android:title="@string/maps_psych"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_call_apa" android:title="@string/call_SAMHSA"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_quit" android:title="@string/quit"
+        android:orderInCategory="100" app:showAsAction="never" />
+</menu>
