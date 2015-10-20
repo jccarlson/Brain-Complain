@@ -101,13 +101,14 @@ public class MainMenuActivity extends AppCompatActivity {
             startAskWatson();
         }
         if (id == R.id.action_maps_psych) {
-            return true;
+            startMapIntent();
         }
         if (id == R.id.action_call_apa) {
-            return true;
+            startCallIntent();
         }
         if (id == R.id.action_quit) {
-            return true;
+            finish();
+            System.exit(0);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -72,13 +72,13 @@ public class WatsonQueryActivity extends AppCompatActivity implements WatsonQuer
             startAskWatson();
         }
         if (id == R.id.action_maps_psych) {
-            return true;
+            startMapIntent();
         }
         if (id == R.id.action_call_apa) {
-            return true;
+            startCallIntent();
         }
         if (id == R.id.action_quit) {
-            return true;
+            startQuitIntent();
         }
         return super.onOptionsItemSelected(item);
     }
