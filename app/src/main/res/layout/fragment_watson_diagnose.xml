@@ -1,0 +1,97 @@
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.ibm.watson.WatsonPhotographyAndroid.MainActivity$PlaceholderFragment"
+    android:orientation="vertical"
+    android:weightSum="2"
+    android:background="#0d0179"
+    android:baselineAligned="false">
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:id="@+id/SymptomList"
+        android:layout_weight="1"
+        android:scrollbars="vertical" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:dividerPadding="10dp"
+        android:padding="10dp">
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Add"
+            android:id="@+id/AddSymptomButton"
+            android:layout_gravity="center_horizontal"
+            android:outlineProvider="bounds"
+            android:textColor="#8bff25"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_margin="5dp"
+            android:background="#0dcee0"
+            android:padding="5dp"
+            android:paddingTop="5dp" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Remove"
+            android:id="@+id/RemoveSymptomButton"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#8bff25"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:layout_margin="5dp"
+            android:background="#0dcee0" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/SubmitButtonText"
+            android:id="@+id/DiagnoseSymptomButton"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#8bff25"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:layout_margin="5dp"
+            android:background="#0dcee0" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView"
+        android:layout_weight="1"
+        android:fillViewport="false">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/WatsonResponseDefault"
+            android:id="@+id/WatsonDiagnoseResponse"
+            android:layout_gravity="center_horizontal"
+            android:nestedScrollingEnabled="true"
+            android:textColor="#ffffffff" />
+    </ScrollView>
+
+</LinearLayout>
+

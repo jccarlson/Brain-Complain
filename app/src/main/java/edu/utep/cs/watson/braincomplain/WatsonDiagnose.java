@@ -2,62 +2,27 @@ package edu.utep.cs.watson.braincomplain;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.view.WindowManager;
 import android.widget.Toast;
-import java.util.ArrayList;
 
-public class MainMenuActivity extends AppCompatActivity {
-    ArrayList<String> menu_list = new ArrayList<String>(3);
+public class WatsonDiagnose extends AppCompatActivity implements WatsonDiagnoseFragment.WatsonQueryCallbacks {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_menu);
-        menu_list.add(getString(R.string.ask_watson));
-        menu_list.add(getString(R.string.maps_psych));
-        menu_list.add(getString(R.string.call_SAMHSA));
-        menu_list.add("Watson Diagnose");
-        ListView listView = (ListView)findViewById(R.id.listView);
-        ArrayAdapter <String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, menu_list);
-        listView.setAdapter(arrayAdapter);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        AdapterView.OnItemClickListener
-                mMessageClickedHandler =
-                new AdapterView.OnItemClickListener() {
-                    public void onItemClick(AdapterView parent,
-                                            View v,
-                                            int position,
-                                            long id) {
-                        switch(position) {
-                            case 0: startAskWatson();
-                                    break;
-                            case 1: startMapIntent();
-                                    break;
-                            case 2: startCallIntent();
-                                    break;
-                            case 3: startDiagnoseIntent();
-                        }
-                    }
-                };
-
-        listView.setOnItemClickListener(mMessageClickedHandler);
-    }
-
-    private void startDiagnoseIntent() {
-        Intent intent = new Intent(this, WatsonDiagnose.class);
-        startActivity(intent);
+        setContentView(R.layout.activity_watson_diagnose);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.diagnoseContainer, new WatsonDiagnoseFragment())
+                    .commit();
+        }
     }
 
     private void startAskWatson() {
@@ -68,11 +33,10 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private void startMapIntent() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("geo:0,0?q=psychiatrist+office+near+me"));
+        intent.setData(Uri.parse("geo:0,0?q=psychiatrist+office"));
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }
-
     }
 
     private void startCallIntent() {
@@ -114,9 +78,34 @@ public class MainMenuActivity extends AppCompatActivity {
             startCallIntent();
         }
         if (id == R.id.action_quit) {
-            finish();
-            System.exit(0);
+            startQuitIntent();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+    }
+
+    @Override
+    public void onPreExecute() {
+
+    }
+
+    @Override
+    public void onProgressUpdate(int percent) {
+
+    }
+
+    @Override
+    public void onCancelled() {
+
+    }
+
+    @Override
+    public void onPostExecute() {
+
     }
 }

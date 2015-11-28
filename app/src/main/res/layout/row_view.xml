@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="100">
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/symptomField"
+        android:minEms="12"
+        android:layout_weight="70"
+        android:text="Symptom"
+        android:editable="true"
+        android:theme="@android:style/Theme.Black"
+        android:textColor="#ffffff"
+        android:textColorHighlight="#ffea00"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:layout_margin="5dp"
+        android:background="#034da1" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:ems="5"
+        android:id="@+id/durationField"
+        android:layout_weight="30"
+        android:text="Duration"
+        android:editable="true"
+        android:theme="@android:style/Theme.Black"
+        android:textColor="#ffffff"
+        android:textColorHighlight="#ffea00"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:layout_margin="5dp"
+        android:background="#034da1" />
+</LinearLayout>
