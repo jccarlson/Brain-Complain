@@ -15,7 +15,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MainMenuActivity extends AppCompatActivity {
-    ArrayList<String> menu_list = new ArrayList<String>(3);
+    ArrayList<String> menu_list = new ArrayList<String>(4);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +55,6 @@ public class MainMenuActivity extends AppCompatActivity {
         listView.setOnItemClickListener(mMessageClickedHandler);
     }
 
-    private void startDiagnoseIntent() {
-        Intent intent = new Intent(this, WatsonDiagnose.class);
-        startActivity(intent);
-    }
-
     private void startAskWatson() {
         Intent intent = new Intent(this, WatsonQueryActivity.class);
         startActivity(intent);
@@ -82,6 +77,10 @@ public class MainMenuActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+    }
+    private void startDiagnoseIntent() {
+        Intent intent = new Intent(this, WatsonDiagnose.class);
+        startActivity(intent);
     }
 
     private void startQuitIntent() {
@@ -113,10 +112,13 @@ public class MainMenuActivity extends AppCompatActivity {
         if (id == R.id.action_call_apa) {
             startCallIntent();
         }
+        if (id == R.id.action_watson_diagnose) {
+            startDiagnoseIntent();
+        }
         if (id == R.id.action_quit) {
-            finish();
-            System.exit(0);
+            startQuitIntent();
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

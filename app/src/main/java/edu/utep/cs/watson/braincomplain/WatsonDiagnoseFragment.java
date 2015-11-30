@@ -1,6 +1,7 @@
 package edu.utep.cs.watson.braincomplain;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,11 +29,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.security.cert.CertificateException;
@@ -53,6 +56,8 @@ public class WatsonDiagnoseFragment extends Fragment {
     private final String mLogTag = "Watson: ";
     private String mWatsonQueryString = "";
     private String mWatsonAnswerString = "";
+    private String title1 = "", title2 = "";
+    private String actualQuery = "";
     private boolean mIsQuerying = false;
     private ListView symptomDisplay;
     private ArrayList<Symptom> symptomList = new ArrayList<>();
@@ -136,12 +141,33 @@ public class WatsonDiagnoseFragment extends Fragment {
                 symptomDisplay.setAdapter(new SymptomAdapter(v.getContext(), symptomList));
                 if (!mIsQuerying) {
                     mIsQuerying = true;
-                    mWatsonQueryString = buildQuestion();
+                    actualQuery = buildQuestion();
+                    mWatsonQueryString = actualQuery;
                     mQuery = new WatsonQuery();
                     mQuery.execute();
                 }
                 hideSoftKeyboard(getActivity());
 
+            }
+        });
+
+        //event binding for Full Response Button
+        getActivity().findViewById(R.id.FullQueryButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), WatsonQueryActivity.class);
+                intent.putExtra("edu.utep.cs.watson.braincomplain.QUERY_EXTRA", actualQuery);
+                startActivity(intent);
+            }
+        });
+
+        //event binding for Compare Button
+        getActivity().findViewById(R.id.CompareButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), WatsonQueryActivity.class);
+                intent.putExtra("edu.utep.cs.watson.braincomplain.QUERY_EXTRA", "What is the differential diagnosis for " + title1 + " and " + title2 + "?");
+                startActivity(intent);
             }
         });
     }
@@ -268,21 +294,42 @@ public class WatsonDiagnoseFragment extends Fragment {
                 mCallbacks.onPostExecute();
             }
 
-            try {
-                if (json != null) {
-                    JSONObject watsonResponse = new JSONObject(json);
-                    JSONObject question = watsonResponse.getJSONObject("question");
-                    JSONArray evidenceArray = question.getJSONArray("evidencelist");
-                    JSONObject mostLikelyValue = evidenceArray.getJSONObject(0);
-                    mWatsonAnswerString = mostLikelyValue.get("text").toString();
-                    TextView textView = (TextView) getActivity().findViewById(R.id.WatsonDiagnoseResponse);
-                    textView.setText(mWatsonAnswerString);
+            if (json != null) {
+                WatsonResponse watsonResponse = WatsonResponseParser.parseWatsonJSON(json);
+                mWatsonAnswerString = "The top diagnoses are: \n";
+                title1 = title2 = "";
+                mWatsonAnswerString+="\t" + (title1 = titleParser(watsonResponse.getEvidenceList().get(0).getTitle())) + " with confidence: " + String.format("%.3f", watsonResponse.getEvidenceList().get(0).getValue()) + "\n";
+                if(watsonResponse.getEvidenceList().size() > 1 && (watsonResponse.getEvidenceList().get(1).getTitle().length() > 0)) {
+                    mWatsonAnswerString += String.format("\t" + (title2 = titleParser(watsonResponse.getEvidenceList().get(1).getTitle())) + " with confidence: " + String.format("%.3f", watsonResponse.getEvidenceList().get(1).getValue()) + "\n");
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                // No valid answern
-                printTryDifferentQuestion();
+                TextView textView = (TextView) getActivity().findViewById(R.id.WatsonDiagnoseResponse);
+                textView.setText(mWatsonAnswerString);
             }
+        }
+
+        private String titleParser(String title) {
+            String ret = "";
+            int end = 0;
+            int start = 0;
+            while ((end < title.length()) && (title.charAt(end) != ':')) {
+                end++;
+            }
+            end++;
+            while ((end < title.length()) && (title.charAt(end) != ':')) {
+                end++;
+            }
+            end++;
+            start = end + 1;
+            while ((end < title.length()) && (title.charAt(end) != ':')) {
+                end++;
+            }
+            end--;
+
+            try {
+                ret = title.substring(start, end);
+            }
+            catch(Exception e) {};
+            return ret;
         }
 
         /*

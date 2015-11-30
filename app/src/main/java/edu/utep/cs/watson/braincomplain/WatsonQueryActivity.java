@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 public class WatsonQueryActivity extends AppCompatActivity implements WatsonQueryFragment.WatsonQueryCallbacks {
 
+    String intentQuery = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +25,8 @@ public class WatsonQueryActivity extends AppCompatActivity implements WatsonQuer
                     .add(R.id.container, new WatsonQueryFragment())
                     .commit();
         }
+
+        intentQuery = getIntent().getStringExtra("edu.utep.cs.watson.braincomplain.QUERY_EXTRA");
     }
 
     private void startAskWatson() {
@@ -46,6 +50,11 @@ public class WatsonQueryActivity extends AppCompatActivity implements WatsonQuer
             startActivity(intent);
         }
 
+    }
+
+    private void startDiagnoseIntent() {
+        Intent intent = new Intent(this, WatsonDiagnose.class);
+        startActivity(intent);
     }
 
     private void startQuitIntent() {
@@ -77,11 +86,15 @@ public class WatsonQueryActivity extends AppCompatActivity implements WatsonQuer
         if (id == R.id.action_call_apa) {
             startCallIntent();
         }
+        if (id == R.id.action_watson_diagnose) {
+            startDiagnoseIntent();
+        }
         if (id == R.id.action_quit) {
             startQuitIntent();
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     protected void onResume()
@@ -107,5 +120,9 @@ public class WatsonQueryActivity extends AppCompatActivity implements WatsonQuer
     @Override
     public void onPostExecute() {
 
+    }
+
+    public String getIntentQuery() {
+        return intentQuery;
     }
 }

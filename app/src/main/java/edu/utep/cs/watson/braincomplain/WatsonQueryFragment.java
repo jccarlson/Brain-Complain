@@ -76,6 +76,8 @@ public class WatsonQueryFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
+
         // restore answer text if it exists in memory
         if(mWatsonAnswerString.length() > 0) {
             TextView watsonQuestion = (TextView) getActivity().findViewById(R.id.watson_answer_text);
@@ -109,6 +111,16 @@ public class WatsonQueryFragment extends Fragment {
         });
 
         getActivity().findViewById(R.id.rootLayout).requestFocus();
+
+        // get the intent query, if there is one, and query it
+        String queryIntent = mCallbacks.getIntentQuery();
+        if(queryIntent != null) {
+            mWatsonQueryString = queryIntent;
+            EditText watsonQuestion = (EditText) getActivity().findViewById(R.id.watson_question_text);
+            watsonQuestion.setText(queryIntent);
+            mQuery = new WatsonQuery();
+            mQuery.execute();
+        }
     }
 
     @Override

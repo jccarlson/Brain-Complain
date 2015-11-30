@@ -76,8 +76,8 @@
     </LinearLayout>
 
     <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/scrollView"
         android:layout_weight="1"
         android:fillViewport="false">
@@ -92,6 +92,45 @@
             android:nestedScrollingEnabled="true"
             android:textColor="#ffffffff" />
     </ScrollView>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Full Response"
+            android:id="@+id/FullQueryButton"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#8bff25"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:layout_margin="5dp"
+            android:background="#0dcee0"
+            android:layout_weight="0" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Compare"
+            android:id="@+id/CompareButton"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#8bff25"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:layout_margin="5dp"
+            android:background="#0dcee0"
+            android:layout_weight="0" />
+    </LinearLayout>
 
 </LinearLayout>
 

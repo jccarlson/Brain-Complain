@@ -7,6 +7,8 @@
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/action_call_apa" android:title="@string/call_SAMHSA"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_watson_diagnose" android:title="@string/title_activity_watson_diagnose"
+        android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/action_quit" android:title="@string/quit"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>

@@ -47,6 +47,10 @@ public class WatsonDiagnose extends AppCompatActivity implements WatsonDiagnoseF
         }
 
     }
+    private void startDiagnoseIntent() {
+        Intent intent = new Intent(this, WatsonDiagnose.class);
+        startActivity(intent);
+    }
 
     private void startQuitIntent() {
         finish();
@@ -76,6 +80,9 @@ public class WatsonDiagnose extends AppCompatActivity implements WatsonDiagnoseF
         }
         if (id == R.id.action_call_apa) {
             startCallIntent();
+        }
+        if (id == R.id.action_watson_diagnose) {
+            startDiagnoseIntent();
         }
         if (id == R.id.action_quit) {
             startQuitIntent();
