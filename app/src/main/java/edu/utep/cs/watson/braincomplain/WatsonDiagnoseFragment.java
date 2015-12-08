@@ -6,6 +6,7 @@ import android.database.DataSetObserver;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.util.SortedList;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +43,8 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -131,6 +134,7 @@ public class WatsonDiagnoseFragment extends Fragment {
         getActivity().findViewById(R.id.RemoveSymptomButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getActivity().findViewById(R.id.RemoveSymptomButton).requestFocus();
                 removeSymptom();
             }
         });
@@ -296,40 +300,51 @@ public class WatsonDiagnoseFragment extends Fragment {
 
             if (json != null) {
                 WatsonResponse watsonResponse = WatsonResponseParser.parseWatsonJSON(json);
-                mWatsonAnswerString = "The top diagnoses are: \n";
-                title1 = title2 = "";
-                mWatsonAnswerString+="\t" + (title1 = titleParser(watsonResponse.getEvidenceList().get(0).getTitle())) + " with confidence: " + String.format("%.3f", watsonResponse.getEvidenceList().get(0).getValue()) + "\n";
-                if(watsonResponse.getEvidenceList().size() > 1 && (watsonResponse.getEvidenceList().get(1).getTitle().length() > 0)) {
-                    mWatsonAnswerString += String.format("\t" + (title2 = titleParser(watsonResponse.getEvidenceList().get(1).getTitle())) + " with confidence: " + String.format("%.3f", watsonResponse.getEvidenceList().get(1).getValue()) + "\n");
+
+                Scanner stringParser = new Scanner(getString(R.string.DiagnosisList));
+                List<Diagnosis> diagnosises = new LinkedList<Diagnosis>();
+                stringParser.useDelimiter(",");
+                while(stringParser.hasNext()) {
+                    diagnosises.add(new Diagnosis(stringParser.next()));
                 }
+
+                stringParser.close();
+
+                for(AnswerEvidence evidence: watsonResponse.getEvidenceList()) {
+                    stringParser = new Scanner(evidence.getTitle());
+                    stringParser.useDelimiter(":");
+                    while(stringParser.hasNext()) {
+                        String subtitle = stringParser.next();
+                        subtitle = subtitle.trim().toLowerCase();
+
+                        for(Diagnosis diagnosis: diagnosises) {
+                            if(subtitle.contains(diagnosis.name))
+                                diagnosis.addWeight(evidence.getValue());
+                        }
+                    }
+                    stringParser.close();
+                }
+
+                //get the top 2 diagnosises
+                for(int i = 0; i < 2; i++) {
+                    int max = i;
+                    for(int j = i + 1; j < diagnosises.size(); j++) {
+                        if(diagnosises.get(j).compareTo(diagnosises.get(max)) > 0){
+                            max = j;
+                        }
+                    }
+                    Diagnosis temp = diagnosises.get(i);
+                    diagnosises.set(i,diagnosises.get(max));
+                    diagnosises.set(max, temp);
+                }
+
+
+                mWatsonAnswerString = "The top diagnoses are: \n";
+                mWatsonAnswerString+="\t" + (title1 = diagnosises.get(0).name) + " with confidence: " + String.format("%.3f", diagnosises.get(0).getWeight()) + "\n";
+                mWatsonAnswerString+="\t" + (title2 = diagnosises.get(1).name) + " with confidence: " + String.format("%.3f", diagnosises.get(1).getWeight()) + "\n";
                 TextView textView = (TextView) getActivity().findViewById(R.id.WatsonDiagnoseResponse);
                 textView.setText(mWatsonAnswerString);
             }
-        }
-
-        private String titleParser(String title) {
-            String ret = "";
-            int end = 0;
-            int start = 0;
-            while ((end < title.length()) && (title.charAt(end) != ':')) {
-                end++;
-            }
-            end++;
-            while ((end < title.length()) && (title.charAt(end) != ':')) {
-                end++;
-            }
-            end++;
-            start = end + 1;
-            while ((end < title.length()) && (title.charAt(end) != ':')) {
-                end++;
-            }
-            end--;
-
-            try {
-                ret = title.substring(start, end);
-            }
-            catch(Exception e) {};
-            return ret;
         }
 
         /*
@@ -387,15 +402,19 @@ public class WatsonDiagnoseFragment extends Fragment {
     private String buildQuestion() {
         String question = "What disorder has symptoms ";
         int i;
-        for(i = 0; i < symptomList.size() - 1; i++) {
+        if(symptomList.size() == 1) {
+            question = "What disorder has symptom " + symptomList.get(0).symptom + " of duration " + symptomList.get(0).duration + "?";
+        } else {
+            for (i = 0; i < symptomList.size() - 1; i++) {
+                String s = symptomList.get(i).symptom;
+                String d = symptomList.get(i).duration;
+                question += (s + " of duration " + d + ", ");
+            }
+
             String s = symptomList.get(i).symptom;
             String d = symptomList.get(i).duration;
-            question += (s + " of duration " + d + ", ");
+            question += ("and " + s + " of duration " + d + "?");
         }
-
-        String s = symptomList.get(i).symptom;
-        String d = symptomList.get(i).duration;
-        question += ("and " + s + " of duration " + d + "?");
         TextView textView = (TextView) getActivity().findViewById(R.id.WatsonDiagnoseResponse);
         textView.setText("Asking Watson: " + question);
         return question;
